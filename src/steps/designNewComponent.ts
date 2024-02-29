@@ -1,14 +1,16 @@
-import { designNewComponentFromDescriptionPrompt } from '../prompts/designNewComponentFromDescription';
+import {
+  designNewComponentFromDescriptionPrompt,
+  DesignNewComponentFromDescriptionPromptInput,
+} from '../prompts/designNewComponentFromDescription';
 import LIBRARY_COMPONENTS from '../data/xtream-ui-kit/components.json';
 import { ChatOpenAI } from '@langchain/openai';
 import { JsonOutputFunctionsParser } from 'langchain/output_parsers';
 import { createStructuredOutputRunnable } from "langchain/chains/openai_functions";
-import { FromSchema } from "json-schema-to-ts";
 
 const designNewComponentFromDescriptionSchema = {
   type: 'object',
   title: 'NewComponentDesign',
-  description: 'Design a new component from the user query using the library components.',
+  description: 'Design a new component from the user query using the provided library components.',
   properties: {
     newComponentName: {
       type: 'string',
@@ -39,13 +41,24 @@ const designNewComponentFromDescriptionSchema = {
   required: ['newComponentName', 'newComponentDescription', 'useLibraryComponents'],
 } as const;
 
-export type NewComponentDesign = FromSchema<typeof designNewComponentFromDescriptionSchema>;
+export type NewComponentDesignOutput = {
+  newComponentName: string;
+  newComponentDescription: string;
+  useLibraryComponents: {
+    libraryComponentName: string;
+    libraryComponentUsageReason: string;
+  }[]
+};
 
-export function designStep(model: ChatOpenAI) {
-  return createStructuredOutputRunnable({
+export function designStep() {
+  const model = new ChatOpenAI({
+    modelName: "gpt-4-0125-preview",
+    streaming: true,
+  });
+  return createStructuredOutputRunnable<DesignNewComponentFromDescriptionPromptInput, NewComponentDesignOutput>({
     prompt: designNewComponentFromDescriptionPrompt,
     llm: model,
-    outputParser: new JsonOutputFunctionsParser(),
     outputSchema: designNewComponentFromDescriptionSchema,
+    outputParser: new JsonOutputFunctionsParser<NewComponentDesignOutput>(),
   });
 }

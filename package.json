@@ -10,14 +10,18 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/uuid": "^9.0.8",
+    "i": "^0.3.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.2.2"
   },
   "dependencies": {
     "@langchain/core": "0.1.30",
     "@langchain/openai": "^0.0.14",
+    "@xtreamsrl/react-ui-kit": "^0.10.1",
     "json-schema-to-ts": "^3.0.0",
-    "langchain": "^0.1.20"
+    "langchain": "^0.1.20",
+    "uuid": "^9.0.1"
   },
   "pnpm": {
     "overrides": {

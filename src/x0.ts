@@ -1,21 +1,26 @@
-import { ChatOpenAI } from "@langchain/openai";
 import { designStep } from './steps/designNewComponent';
 import LIBRARY_COMPONENTS from './data/xtream-ui-kit/components.json';
-import { RunnablePassthrough, RunnableSequence } from '@langchain/core/runnables';
+import { RunnableSequence } from '@langchain/core/runnables';
+import { buildContextStep } from './steps/buildContextStep';
+import { generateNewComponentStep } from './steps/generateNewComponent';
+import * as path from 'path';
+import { SaveContentToFile } from './tools/saveContentToFile';
 
 (async () => {
   const libraryComponents = LIBRARY_COMPONENTS.map(component => `${component.name} : ${component.description};`).join('\n');
 
-  const model = new ChatOpenAI({
-    modelName: "gpt-3.5-turbo",
-    streaming: true,
+  const pipeline = RunnableSequence.from([
+    designStep(),
+    buildContextStep(),
+    generateNewComponentStep(),
+    new SaveContentToFile(path.join(__dirname, 'tmp')),
+  ]);
+
+  const filePath = await pipeline.invoke({
+    userDescription: 'A simple card with a text and a button with the text "Works?" which is clickable and triggers an alert with the text "It works!"',
+    libraryComponents,
+    framework: 'React',
   });
 
-  const pipeline = RunnableSequence.from([
-    new RunnablePassthrough(),
-    designStep(model),
-  ])
-  const result = await pipeline.invoke({ userDescription: 'A simple card with a text and a button', libraryComponents, framework: 'React' })
-
-  console.log(result);
+  console.log(filePath);
 })();
