@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "node -r ts-node/register --env-file=config.env src/x0.ts"
+    "serve": "node -r ts-node/register --env-file=config.env src/server.ts"
   },
   "keywords": [],
   "author": "",

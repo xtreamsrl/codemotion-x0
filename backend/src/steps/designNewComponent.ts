@@ -50,13 +50,15 @@ export type NewComponentDesignOutput = {
   }[]
 };
 
-export function designStep() {
+export async function designStep() {
   const model = new ChatOpenAI({
     modelName: "gpt-4-0125-preview",
     streaming: true,
   });
-  return createStructuredOutputRunnable<DesignNewComponentFromDescriptionPromptInput, NewComponentDesignOutput>({
-    prompt: designNewComponentFromDescriptionPrompt,
+  const libraryComponents = LIBRARY_COMPONENTS.map(component => `${component.name} : ${component.description};`).join('\n');
+  const designPrompt = await designNewComponentFromDescriptionPrompt.partial({ libraryComponents });
+  return createStructuredOutputRunnable<Omit<DesignNewComponentFromDescriptionPromptInput, 'libraryComponents'>, NewComponentDesignOutput>({
+    prompt: designPrompt,
     llm: model,
     outputSchema: designNewComponentFromDescriptionSchema,
     outputParser: new JsonOutputFunctionsParser<NewComponentDesignOutput>(),
