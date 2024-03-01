@@ -1,0 +1,30 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "node -r ts-node/register --env-file=config.env src/x0.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/uuid": "^9.0.8",
+    "i": "^0.3.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@langchain/core": "0.1.30",
+    "@langchain/openai": "^0.0.14",
+    "json-schema-to-ts": "^3.0.0",
+    "langchain": "^0.1.20",
+    "uuid": "^9.0.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "@langchain/core": "0.1.30"
+    }
+  }
+}

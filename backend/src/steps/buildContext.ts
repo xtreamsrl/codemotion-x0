@@ -1,5 +1,5 @@
 import { NewComponentDesignOutput } from './designNewComponent';
-import LIBRARY_COMPONENTS_METADATA from '../data/xtream-ui-kit/components.json';
+import LIBRARY_COMPONENTS_METADATA from '../data/components.json';
 import { RunnableLambda } from '@langchain/core/runnables';
 
 type ComponentContext = {

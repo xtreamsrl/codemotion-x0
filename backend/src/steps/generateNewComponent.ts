@@ -5,7 +5,7 @@ import {
   generateTaskPrompt,
 } from '../prompts/generateNewComponentFromDescription';
 import { StringOutputParser } from '@langchain/core/output_parsers';
-import { Context } from './buildContextStep';
+import { Context } from './buildContext';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { RunnableLambda, RunnableSequence } from '@langchain/core/runnables';
 import { componentContextPrompt } from '../prompts/componentContext';

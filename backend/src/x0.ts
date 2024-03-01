@@ -1,7 +1,7 @@
 import { designStep } from './steps/designNewComponent';
-import LIBRARY_COMPONENTS from './data/xtream-ui-kit/components.json';
+import LIBRARY_COMPONENTS from './data/components.json';
 import { RunnableSequence } from '@langchain/core/runnables';
-import { buildContextStep } from './steps/buildContextStep';
+import { buildContextStep } from './steps/buildContext';
 import { generateNewComponentStep } from './steps/generateNewComponent';
 import * as path from 'path';
 import { SaveContentToFile } from './tools/saveContentToFile';

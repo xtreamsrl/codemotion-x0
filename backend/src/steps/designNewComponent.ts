@@ -2,7 +2,7 @@ import {
   designNewComponentFromDescriptionPrompt,
   DesignNewComponentFromDescriptionPromptInput,
 } from '../prompts/designNewComponentFromDescription';
-import LIBRARY_COMPONENTS from '../data/xtream-ui-kit/components.json';
+import LIBRARY_COMPONENTS from '../data/components.json';
 import { ChatOpenAI } from '@langchain/openai';
 import { JsonOutputFunctionsParser } from 'langchain/output_parsers';
 import { createStructuredOutputRunnable } from "langchain/chains/openai_functions";
