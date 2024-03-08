@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "node -r ts-node/register --env-file=config.env src/server.ts"
+    "serve": "tsx --env-file=config.env src/server.ts",
+    "watch": "tsx watch --env-file=config.env src/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,10 +17,13 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@fastify/cors": "^9.0.1",
     "@langchain/core": "0.1.30",
     "@langchain/openai": "^0.0.14",
+    "fastify": "^4.26.2",
     "json-schema-to-ts": "^3.0.0",
     "langchain": "^0.1.20",
+    "tsx": "^4.7.1",
     "uuid": "^9.0.1"
   },
   "pnpm": {

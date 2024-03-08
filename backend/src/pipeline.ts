@@ -5,6 +5,8 @@ import { generateNewComponentStep } from './steps/generateNewComponent';
 import * as path from 'path';
 import { SaveContentToFile } from './tools/saveContentToFile';
 
+const baseDir = path.join(__dirname, '..', '..', 'frontend', 'src', 'generated');
+
 export type PipelineInputs = {
   userDescription: string;
   framework: string;
@@ -15,7 +17,7 @@ export async function pipeline(inputs: PipelineInputs) {
     await designStep(),
     buildContextStep(),
     generateNewComponentStep(),
-    new SaveContentToFile(path.join(__dirname, 'tmp')),
+    new SaveContentToFile(baseDir),
   ]);
 
   const filePath = await pipeline.invoke(inputs);

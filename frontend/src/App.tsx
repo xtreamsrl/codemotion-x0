@@ -1,35 +1,62 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import { JSXElementConstructor, useState } from 'react';
+import logo from './logo.png';
 import './App.css';
 import { ThemeProvider } from './theme.tsx';
+import { Box } from '@xtreamsrl/react-ui-kit/Box';
+import { Button, Flex, TextInput, Typography } from '@xtreamsrl/react-ui-kit';
 
 function App() {
-  const [count, setCount] = useState(0);
+
+  const [prompt, setPrompt] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [generated, setGenerated] = useState(false);
+  const [Component, setComponent] = useState<JSXElementConstructor<any>>(()=><></>);
+
+  function generate() {
+    setLoading(true);
+    fetch('http://localhost:8080/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ description: prompt }),
+    }).then(response => response.json()).then(data => {
+      return import(`./generated/${data.path}`  /* @vite-ignore */);
+    }).then(module => {
+      setLoading(false);
+      setGenerated(true);
+      setComponent(module.default);
+    }).catch(error => {
+      setLoading(false);
+      console.error('Error:', error);
+    });
+  }
+
+  if (generated && !Component) {
+    throw new Error('Component not loaded');
+  }
 
   return (
     <>
       <ThemeProvider>
-        <div>
-          <a href="https://vitejs.dev" target="_blank">
-            <img src={viteLogo} className="logo" alt="Vite logo"/>
-          </a>
-          <a href="https://react.dev" target="_blank">
-            <img src={reactLogo} className="logo react" alt="React logo"/>
-          </a>
-        </div>
-        <h1>Vite + React</h1>
-        <div className="card">
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test HMR
-          </p>
-        </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
+        {loading && <div>Loading...</div>}
+        {!generated ? (
+          <Flex direction="column" gap="md-2">
+            <Box>
+              <img src={logo}/>
+            </Box>
+            <TextInput label="Prompt" name="prompt" value={prompt} onChange={(e) => setPrompt(e.target.value)}/>
+            <Button onClick={() => generate()}>Generate</Button>
+          </Flex>
+        ) : (
+          <Flex direction="column" gap="md-2">
+            <Typography>{prompt}</Typography>
+            <Box>
+              <Component />
+            </Box>
+          </Flex>
+        )}
+
       </ThemeProvider>
     </>
   );

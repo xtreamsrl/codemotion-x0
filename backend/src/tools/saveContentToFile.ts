@@ -25,6 +25,6 @@ export class SaveContentToFile extends Tool {
     const filename = this.fileName();
     const filePath = path.join(this.basePath, filename);
     fs.writeFileSync(filePath, input);
-    return filePath;
+    return filename;
   }
 }
