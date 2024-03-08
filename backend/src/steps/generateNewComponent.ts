@@ -17,6 +17,7 @@ async function generateNewComponentPrompt(inputs: Context): Promise<ChatPromptTe
       component => componentContextPrompt.format(component),
     ),
   );
+  // todo utils viene preso ogni volta e ci stanon un triliardo di token
   const data = {
     newComponentDescription: inputs.newComponentDescription,
     newComponentName: inputs.newComponentName,

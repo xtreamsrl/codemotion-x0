@@ -4,6 +4,7 @@ import { buildContextStep } from './steps/buildContext';
 import { generateNewComponentStep } from './steps/generateNewComponent';
 import * as path from 'path';
 import { SaveContentToFile } from './tools/saveContentToFile';
+import { RemoveMD } from './tools/removeMD';
 
 const baseDir = path.join(__dirname, '..', '..', 'frontend', 'src', 'generated');
 
@@ -17,6 +18,7 @@ export async function pipeline(inputs: PipelineInputs) {
     await designStep(),
     buildContextStep(),
     generateNewComponentStep(),
+    new RemoveMD(),
     new SaveContentToFile(baseDir),
   ]);
 

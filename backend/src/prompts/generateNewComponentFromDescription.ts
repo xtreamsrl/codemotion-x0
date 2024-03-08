@@ -13,7 +13,7 @@ export const generateTaskPrompt = HumanMessagePromptTemplate.fromTemplate(
 - NEW COMPONENT DESCRIPTION : {newComponentDescription}
 Write the full code for the new {framework} web component based on the provided design task.
 Important :
-- Answer with generated code only. DO NOT ADD ANY EXTRA TEXT DESCRIPTION OR COMMENTS BESIDES THE CODE.
+- Answer with generated code only. DO NOT ADD ANY EXTRA TEXT DESCRIPTION OR COMMENTS BESIDES THE CODE, NEITHER MARKDOWN, JUST THE CODE STRING.
 - Make sure you import provided components libraries that are provided to you if you use them;
 - Do not use libraries or imports except what is provided in this task;
 - DO NOT HAVE ANY DYNAMIC DATA OR DATA PROPS! Components are meant to be working as is without supplying any variable to them when importing them! Only write a component that render directly with placeholders as data.

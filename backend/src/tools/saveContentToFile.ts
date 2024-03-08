@@ -22,6 +22,7 @@ export class SaveContentToFile extends Tool {
   }
 
   async _call(input: string): Promise<string> {
+    // todo move the clean
     const filename = this.fileName();
     const filePath = path.join(this.basePath, filename);
     fs.writeFileSync(filePath, input);

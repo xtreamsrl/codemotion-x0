@@ -1,16 +1,17 @@
-import { JSXElementConstructor, useState } from 'react';
+import React, { JSXElementConstructor, Suspense, useEffect, useState } from 'react';
 import logo from './logo.png';
 import './App.css';
 import { ThemeProvider } from './theme.tsx';
 import { Box } from '@xtreamsrl/react-ui-kit/Box';
 import { Button, Flex, TextInput, Typography } from '@xtreamsrl/react-ui-kit';
+import A from './generated/5db2e0ff-0012-49a0-9c2e-1da46aafa74b.tsx';
 
 function App() {
 
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [generated, setGenerated] = useState(false);
-  const [Component, setComponent] = useState<JSXElementConstructor<any>>(()=><></>);
+  const [Component, setComponent] = useState<JSXElementConstructor<any>>(() => <></>);
 
   function generate() {
     setLoading(true);
@@ -21,11 +22,9 @@ function App() {
       },
       body: JSON.stringify({ description: prompt }),
     }).then(response => response.json()).then(data => {
-      return import(`./generated/${data.path}`  /* @vite-ignore */);
-    }).then(module => {
       setLoading(false);
       setGenerated(true);
-      setComponent(module.default);
+      setComponent(React.lazy(() => import(`./generated/${data.path}`)));
     }).catch(error => {
       setLoading(false);
       console.error('Error:', error);
@@ -37,8 +36,9 @@ function App() {
   }
 
   return (
-    <>
+    <Suspense>
       <ThemeProvider>
+        <A/>
         {loading && <div>Loading...</div>}
         {!generated ? (
           <Flex direction="column" gap="md-2">
@@ -52,13 +52,13 @@ function App() {
           <Flex direction="column" gap="md-2">
             <Typography>{prompt}</Typography>
             <Box>
-              <Component />
+              {React.createElement(Component)}
             </Box>
           </Flex>
         )}
 
       </ThemeProvider>
-    </>
+    </Suspense>
   );
 }
 

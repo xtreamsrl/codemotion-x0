@@ -137,7 +137,7 @@
       "examples": [
         {
           "source": "Button.example.tsx",
-          "code": "import React from 'react';\nimport Button from './Button';\n\n\n// Example of Button usage\nconst Example = () => {\n\n  return (\n    <>\n      <Button onClick={() => console.log('click')} onlyIcon icon={<></>} />\n      <Button onClick={() => console.log('click')} color='red' leftIcon={<></>} size='sm'>Like</Button>\n      <Button onClick={() => console.log('click')} variant='tinted' color='green'>Success Button</Button>\n    </>\n  );\n};\n"
+          "code": "import React from 'react';\nimport Button from './Button';\n\n\n// Example of Button usage\nconst Example = () => {\n\n  return (\n    <>\n      <Button onClick={() => console.log('click')} onlyIcon icon={<Icon name='X' />} />\n      <Button onClick={() => console.log('click')} color='red' leftIcon={<Icon name='X' />} size='sm'>Like</Button>\n      <Button onClick={() => console.log('click')} variant='tinted' color='green'>Success Button</Button>\n    </>\n  );\n};\n"
         }
       ]
     }
