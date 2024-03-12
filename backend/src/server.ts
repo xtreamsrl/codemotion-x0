@@ -1,6 +1,6 @@
-import { lcPipeline } from './lcPipeline';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import { pipeline } from './pipeline';
 
 const fastify = Fastify({
   logger: true,
@@ -19,7 +19,7 @@ const fastify = Fastify({
       userDescription: (request.body as any).description,
       framework: 'react',
     };
-    const result = await lcPipeline(inputs);
+    const result = await pipeline(inputs);
 
     reply.send({ path: result });
   });

@@ -1,6 +1,5 @@
 import { NewComponentDesignOutput } from './designNewComponent';
 import LIBRARY_COMPONENTS_METADATA from '../data/components.json';
-import { RunnableLambda } from '@langchain/core/runnables';
 
 type ComponentContext = {
   name: string;
@@ -21,7 +20,7 @@ export type Context = NewComponentDesignOutput & {
  * the usage reason generated in the design step.
  * @param inputs - The output of the design step
  */
-export function _buildContext(inputs: NewComponentDesignOutput): Context {
+export function buildContextStep(inputs: NewComponentDesignOutput): Context {
   const context: ComponentContext[] = [];
   for (const suggestedComponent of inputs.useLibraryComponents) {
     const component = LIBRARY_COMPONENTS_METADATA.filter(componentMeta => componentMeta.name === suggestedComponent.libraryComponentName);
@@ -42,19 +41,4 @@ export function _buildContext(inputs: NewComponentDesignOutput): Context {
     ...inputs,
     components: context,
   };
-}
-
-export function buildContextStep(inputs: NewComponentDesignOutput): Context {
-  return _buildContext(inputs);
-}
-
-// --- Langchain ---
-
-/**
- * Langchain wrapper for the buildContext function
- */
-export function lcBuildContextStep() {
-  return new RunnableLambda<NewComponentDesignOutput, Context>({
-    func: _buildContext
-  })
 }

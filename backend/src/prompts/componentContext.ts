@@ -1,5 +1,3 @@
-import { HumanMessagePromptTemplate } from '@langchain/core/prompts';
-
 export const rawComponentContextPrompt =
   `Suggested library component:
   Name: {name}
@@ -15,7 +13,3 @@ export const rawComponentContextPrompt =
   {usageExamples}
 ---
 `;
-
-// --- Langchain ---
-
-export const componentContextPrompt = HumanMessagePromptTemplate.fromTemplate(rawComponentContextPrompt);

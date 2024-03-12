@@ -3,12 +3,16 @@ import OpenAI from 'openai';
 import { designStep } from './steps/designNewComponent';
 import { buildContextStep } from './steps/buildContext';
 import { generateNewComponentStep } from './steps/generateNewComponent';
-import { saveToFile } from './tools/saveContentToFile';
 import path from 'path';
-import { removeMD } from './tools/removeMD';
-import { PipelineInputs } from './utils';
 import { validateComponentStep } from './steps/validationStep';
 import { fixErrorsStep } from './steps/fixErrorsStep';
+import { removeMD, saveToFile } from './utils';
+
+type PipelineInputs = {
+  userDescription: string;
+  framework: string;
+};
+
 
 const baseDir = path.join(__dirname, '..', '..', 'frontend', 'src', 'generated');
 
@@ -69,13 +73,7 @@ export async function pipeline(inputs: PipelineInputs) {
   }
 
   // Save to file step
-  return saveToFile(baseDir, sourceCode);
+  const fileName = saveToFile(baseDir, sourceCode);
+  console.log(fileName);
+  return fileName;
 }
-
-// Run the pipeline
-(async () => {
-  await pipeline({
-    userDescription: 'User query: "I need a button that changes color when clicked"',
-    framework: 'React',
-  });
-})();

@@ -1,11 +1,9 @@
 import {
-  designNewComponentFromDescriptionPrompt,
-  DesignNewComponentFromDescriptionPromptInput, rawDesignContextPrompt, rawDesignSystemPrompt, rawDesignTaskPrompt,
+  rawDesignContextPrompt,
+  rawDesignSystemPrompt,
+  rawDesignTaskPrompt,
 } from '../prompts/designNewComponentFromDescription';
 import LIBRARY_COMPONENTS from '../data/components.json';
-import { ChatOpenAI } from '@langchain/openai';
-import { JsonOutputFunctionsParser } from 'langchain/output_parsers';
-import { createStructuredOutputRunnable } from "langchain/chains/openai_functions";
 import OpenAI from 'openai';
 import { formatString, PipelineInputs } from '../utils';
 
@@ -83,21 +81,4 @@ export async function designStep(openaiClient: OpenAI, inputs: PipelineInputs): 
   }
   console.log(designOutput);
   return designOutput;
-}
-
-// --- Langchain ---
-
-export async function lcDesignStep() {
-  const model = new ChatOpenAI({
-    modelName: "gpt-4-0125-preview",
-    streaming: true,
-  });
-  const libraryComponents = LIBRARY_COMPONENTS.map(component => `${component.name} : ${component.description};`).join('\n');
-  const designPrompt = await designNewComponentFromDescriptionPrompt.partial({ libraryComponents });
-  return createStructuredOutputRunnable<Omit<DesignNewComponentFromDescriptionPromptInput, 'libraryComponents'>, NewComponentDesignOutput>({
-    prompt: designPrompt,
-    llm: model,
-    outputSchema: designNewComponentFromDescriptionSchema,
-    outputParser: new JsonOutputFunctionsParser<NewComponentDesignOutput>(),
-  });
 }

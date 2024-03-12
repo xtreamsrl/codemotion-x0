@@ -1,5 +1,3 @@
-import { HumanMessagePromptTemplate, SystemMessagePromptTemplate } from '@langchain/core/prompts';
-
 export const rawGenerateSystemPrompt =
   `You are an expert Software Engineer with an extensive knowledge of web development with the {framework} framework.
 Your task is to write a new {framework} component for a web app, according to the provided task details.
@@ -17,15 +15,3 @@ Important :
 - Do not use libraries or imports except what is provided in this task;
 - DO NOT HAVE ANY DYNAMIC DATA OR DATA PROPS! Components are meant to be working as is without supplying any variable to them when importing them! Only write a component that render directly with placeholders as data.
 Take a deep breath and write the {framework} component code as the creative genius and experienced {framework} Software Engineer you are.`;
-
-// --- Langchain ---
-
-export const generateSystemPrompt = SystemMessagePromptTemplate.fromTemplate(rawGenerateSystemPrompt);
-
-export const generateTaskPrompt = HumanMessagePromptTemplate.fromTemplate(rawGenerateTaskPrompt);
-
-export type GenerateNewComponentFromDescriptionPromptInput = {
-  framework: string;
-  newComponentName: string;
-  newComponentDescription: string;
-};
