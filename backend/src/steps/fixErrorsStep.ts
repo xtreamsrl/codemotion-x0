@@ -1,5 +1,7 @@
 import OpenAI from 'openai';
 import { formatString } from '../utils';
+import { Context } from './buildContext';
+import { rawComponentContextPrompt } from '../prompts/componentContext';
 
 const rawFixErrorsSystemPrompt =
   `You are a talented senior software engineer, you are an expert in {framework} and TypeScript
@@ -20,27 +22,23 @@ export type FixErrorsStepInputs = {
   framework: string;
 }
 
-type Message = {
-  role: 'user' | 'system',
-  content: string
-}
-
-export async function fixErrorsStep(openaiClient: OpenAI, messageHistory: Message[], inputs: FixErrorsStepInputs): Promise<string | null> {
-  console.log('Fix errors step started...')
+export async function fixErrorsStep(openaiClient: OpenAI, context: Context, inputs: FixErrorsStepInputs): Promise<string | null> {
+  console.log('Fix errors step started...');
+  const contextMessages = context.components.map(component => formatString(rawComponentContextPrompt, component));
   const fixErrorsSystemPrompt = formatString(rawFixErrorsSystemPrompt, { framework: inputs.framework });
   const fixErrorsPromptWithErrors = formatString(rawFixErrorsTaskPrompt, {
     errors: inputs.errors.join('\n'),
     sourceCode: inputs.sourceCode,
   });
   const fixMessages = [
-    ...messageHistory,
     { role: 'system' as const, content: fixErrorsSystemPrompt },
+    ...contextMessages.map(content => ({ role: 'user' as const, content })),
     { role: 'user' as const, content: fixErrorsPromptWithErrors },
   ];
   const chatCompletion = await openaiClient.chat.completions.create({
     messages: fixMessages,
     model: 'gpt-4-0125-preview',
   });
-  console.log('Fix errors step completed.')
+  console.log('Fix errors step completed.');
   return chatCompletion.choices[0].message.content;
 }

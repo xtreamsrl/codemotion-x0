@@ -39,29 +39,29 @@ export async function pipeline(inputs: PipelineInputs) {
 
   // Validation step
   let sourceCode = removeMD(generationOutput);
-  let validationOutput = await validateComponentStep(sourceCode);
+  let validationOutput = validateComponentStep(sourceCode);
   let iterationCount = 0;
   logStepData(executionId, `validation-${iterationCount}`, sourceCode, validationOutput);
 
   while (!validationOutput.success && iterationCount < 5) {
-    const fixedSourceCode = await fixErrorsStep(openai, [], {
+    const fixedSourceCode = await fixErrorsStep(openai, context, {
       sourceCode,
       errors: validationOutput.errors,
       framework: inputs.framework,
     });
-
-    if (!fixedSourceCode) {
-      console.error('Fix errors step failed');
-      continue;
-    }
     logStepData(executionId, `fix-errors-${iterationCount}`, {
       sourceCode,
       errors: validationOutput.errors,
       framework: inputs.framework,
     }, fixedSourceCode);
 
+    if (!fixedSourceCode) {
+      console.error('Fix errors step failed');
+      continue;
+    }
+
     sourceCode = removeMD(fixedSourceCode);
-    validationOutput = await validateComponentStep(sourceCode);
+    validationOutput = validateComponentStep(sourceCode);
     logStepData(executionId, `validation-${iterationCount}`, sourceCode, validationOutput);
     iterationCount++;
   }

@@ -126,7 +126,7 @@ function testRenderComponent(compiledJs: string): RenderOutput {
 }
 
 // Utils function to validate the component from TypeScript source code
-export async function validateComponentStep(sourceCode: string): Promise<ValidationOutput> {
+export function validateComponentStep(sourceCode: string): ValidationOutput {
   console.log('Validation step started...');
   const errors = [];
   let success = true;
