@@ -51,6 +51,7 @@ export type NewComponentDesignOutput = {
 };
 
 export async function designStep(openaiClient: OpenAI, inputs: PipelineInputs): Promise<NewComponentDesignOutput | undefined> {
+  console.log('Design step started...');
   const designSystemPrompt = formatString(rawDesignSystemPrompt, inputs);
   const designContextPrompt = formatString(rawDesignContextPrompt, inputs);
   const designTaskPrompt = formatString(rawDesignTaskPrompt, inputs);
@@ -59,11 +60,9 @@ export async function designStep(openaiClient: OpenAI, inputs: PipelineInputs): 
     { role: 'user' as const, content: designContextPrompt },
     { role: 'user' as const, content: designTaskPrompt },
   ];
-  console.log(JSON.stringify(designMessages, null, 2));
   const chatCompletion = await openaiClient.chat.completions.create({
     messages: designMessages,
-    // model: 'gpt-4-0125-preview',
-    model: 'gpt-3.5-turbo-0125',
+    model: 'gpt-4-0125-preview',
     tool_choice: { type: 'function', function: { name: 'designNewComponentFromDescription' } },
     tools: [{
       type: 'function',
@@ -79,6 +78,6 @@ export async function designStep(openaiClient: OpenAI, inputs: PipelineInputs): 
   if (chatCompletionResult) {
     designOutput = JSON.parse(chatCompletionResult[0].function.arguments);
   }
-  console.log(designOutput);
+  console.log('Design step completed.');
   return designOutput;
 }

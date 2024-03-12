@@ -1,10 +1,9 @@
-import React, { JSXElementConstructor, Suspense, useEffect, useState } from 'react';
+import React, { JSXElementConstructor, Suspense, useState } from 'react';
 import logo from './logo.png';
 import './App.css';
 import { ThemeProvider } from './theme.tsx';
 import { Box } from '@xtreamsrl/react-ui-kit/Box';
 import { Button, Flex, TextInput, Typography } from '@xtreamsrl/react-ui-kit';
-import A from './generated/5db2e0ff-0012-49a0-9c2e-1da46aafa74b.tsx';
 
 function App() {
 
@@ -38,7 +37,6 @@ function App() {
   return (
     <Suspense>
       <ThemeProvider>
-        <A/>
         {loading && <div>Loading...</div>}
         {!generated ? (
           <Flex direction="column" gap="md-2">

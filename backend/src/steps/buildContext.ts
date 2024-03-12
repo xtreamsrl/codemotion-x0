@@ -21,6 +21,7 @@ export type Context = NewComponentDesignOutput & {
  * @param inputs - The output of the design step
  */
 export function buildContextStep(inputs: NewComponentDesignOutput): Context {
+  console.log('Build context step started...')
   const context: ComponentContext[] = [];
   for (const suggestedComponent of inputs.useLibraryComponents) {
     const component = LIBRARY_COMPONENTS_METADATA.filter(componentMeta => componentMeta.name === suggestedComponent.libraryComponentName);
@@ -37,6 +38,7 @@ export function buildContextStep(inputs: NewComponentDesignOutput): Context {
       usageExamples: component[0].docs.examples.map(example => `\`\`\`${example.source}\n${example.code.trim()}\n\`\`\``).join('\n'),
     });
   }
+  console.log('Build context step completed.')
   return {
     ...inputs,
     components: context,

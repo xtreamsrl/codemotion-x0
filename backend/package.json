@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "serve": "tsx --env-file=config.env src/server.ts",
-    "watch": "tsx watch --env-file=config.env src/server.ts",
-    "pipeline": "tsx --env-file=config.env src/pipeline.ts"
+    "watch": "tsx watch --env-file=config.env src/server.ts"
   },
   "keywords": [],
   "author": {

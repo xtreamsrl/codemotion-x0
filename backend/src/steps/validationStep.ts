@@ -82,7 +82,6 @@ const compileTypeScript = (sourceCode: string): CompileTypeScriptOutput => {
     const result = ts.transpileModule(sourceCode, {
       compilerOptions,
     });
-    console.log('TypeScript compiled successfully.', result.diagnostics);
     return {
       compiledJs: result.outputText,
       tsErrors: [],
@@ -128,31 +127,31 @@ function testRenderComponent(compiledJs: string): RenderOutput {
 
 // Utils function to validate the component from TypeScript source code
 export async function validateComponentStep(sourceCode: string): Promise<ValidationOutput> {
+  console.log('Validation step started...');
+  const errors = [];
+  let success = true;
   const { compiledJs, tsErrors } = compileTypeScript(sourceCode);
 
   if (tsErrors.length > 0) {
-    console.error('TypeScript errors:', tsErrors);
-    return {
-      success: false,
-      errors: tsErrors,
-    };
+    success = false;
+    errors.push(...tsErrors);
   } else {
     if (!compiledJs) {
       throw new Error('Error compiling TypeScript');
     }
-    const renderOutput =  testRenderComponent(compiledJs);
-    if (renderOutput.success) {
-      console.log('Component rendered successfully');
-      return {
-        success: true,
-        errors: [],
-      };
-    } else {
-      // console.error('Error rendering component:', renderOutput.errors);
-      return {
-        success: false,
-        errors: renderOutput.errors,
-      };
+    const renderOutput = testRenderComponent(compiledJs);
+    if (!renderOutput.success) {
+      success = false;
+      errors.push(...renderOutput.errors);
     }
   }
+  if (errors.length > 0) {
+    console.error(`Validation step completed with errors:\n${errors.join('\n')}.`);
+  } else {
+    console.log('Validation step completed.');
+  }
+  return {
+    success,
+    errors,
+  };
 }

@@ -26,6 +26,7 @@ type Message = {
 }
 
 export async function fixErrorsStep(openaiClient: OpenAI, messageHistory: Message[], inputs: FixErrorsStepInputs): Promise<string | null> {
+  console.log('Fix errors step started...')
   const fixErrorsSystemPrompt = formatString(rawFixErrorsSystemPrompt, { framework: inputs.framework });
   const fixErrorsPromptWithErrors = formatString(rawFixErrorsTaskPrompt, {
     errors: inputs.errors.join('\n'),
@@ -40,5 +41,6 @@ export async function fixErrorsStep(openaiClient: OpenAI, messageHistory: Messag
     messages: fixMessages,
     model: 'gpt-4-0125-preview',
   });
+  console.log('Fix errors step completed.')
   return chatCompletion.choices[0].message.content;
 }

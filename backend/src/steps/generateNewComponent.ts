@@ -5,6 +5,7 @@ import { formatString, PipelineInputs } from '../utils';
 import OpenAI from 'openai';
 
 export async function generateNewComponentStep(openaiClient: OpenAI, inputs: Context & PipelineInputs): Promise<string | null> {
+  console.log('Generation step started...');
   const contextMessages = inputs.components.map(component => formatString(rawComponentContextPrompt, component));
   const generateSystemPrompt = formatString(rawGenerateSystemPrompt, { framework: inputs.framework });
   const generateTaskPrompt = formatString(rawGenerateTaskPrompt, {
@@ -22,5 +23,6 @@ export async function generateNewComponentStep(openaiClient: OpenAI, inputs: Con
     model: 'gpt-4-0125-preview',
   });
 
+  console.log('Generation step completed.');
   return chatCompletion.choices[0].message.content;
 }

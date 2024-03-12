@@ -6,31 +6,28 @@ import { generateNewComponentStep } from './steps/generateNewComponent';
 import path from 'path';
 import { validateComponentStep } from './steps/validationStep';
 import { fixErrorsStep } from './steps/fixErrorsStep';
-import { removeMD, saveToFile } from './utils';
-
-type PipelineInputs = {
-  userDescription: string;
-  framework: string;
-};
-
+import { logStepData, PipelineInputs, removeMD, saveToFile } from './utils';
+import { v4 as uuid } from 'uuid';
 
 const baseDir = path.join(__dirname, '..', '..', 'frontend', 'src', 'generated');
 
 export async function pipeline(inputs: PipelineInputs) {
+  const executionId = uuid();
+  console.log(`Pipeline started with execution id: ${executionId}`);
   const openai = new OpenAI();
-  const libraryComponents = LIBRARY_COMPONENTS_METADATA.map(component => `${component.name} : ${component.description};`).join('\n');
 
   // Design step
+  const libraryComponents = LIBRARY_COMPONENTS_METADATA.map(component => `${component.name} : ${component.description};`).join('\n');
   const designStepInputs = { ...inputs, libraryComponents };
   const designStepOutput = await designStep(openai, designStepInputs);
   if (!designStepOutput) {
     throw new Error('Design step failed');
   }
-  console.log(designStepOutput);
+  logStepData(executionId, 'design', designStepInputs, designStepOutput);
 
   // Context generation step
   const context = buildContextStep(designStepOutput);
-  console.log(context);
+  logStepData(executionId, 'context', designStepOutput, context);
 
   // Generation step
   const generateNewComponentStepInputs = { ...context, ...inputs };
@@ -38,42 +35,45 @@ export async function pipeline(inputs: PipelineInputs) {
   if (!generationOutput) {
     throw new Error('Generation step failed');
   }
-  console.log(generationOutput)
+  logStepData(executionId, 'generation', generateNewComponentStepInputs, generationOutput);
 
   // Validation step
   let sourceCode = removeMD(generationOutput);
   let validationOutput = await validateComponentStep(sourceCode);
   let iterationCount = 0;
-  const sourceCodeHistory = [sourceCode];
-  const validationHistory = [validationOutput];
+  logStepData(executionId, `validation-${iterationCount}`, sourceCode, validationOutput);
 
   while (!validationOutput.success && iterationCount < 5) {
-    console.error('Validation step failed:', validationOutput.errors);
-    const fixedSourceCode = await fixErrorsStep(openai, [],{
+    const fixedSourceCode = await fixErrorsStep(openai, [], {
       sourceCode,
       errors: validationOutput.errors,
       framework: inputs.framework,
     });
 
     if (!fixedSourceCode) {
-      throw new Error('Fix errors step failed');
+      console.error('Fix errors step failed');
+      continue;
     }
+    logStepData(executionId, `fix-errors-${iterationCount}`, {
+      sourceCode,
+      errors: validationOutput.errors,
+      framework: inputs.framework,
+    }, fixedSourceCode);
 
     sourceCode = removeMD(fixedSourceCode);
-    sourceCodeHistory.push(sourceCode);
     validationOutput = await validateComponentStep(sourceCode);
-    validationHistory.push(validationOutput);
+    logStepData(executionId, `validation-${iterationCount}`, sourceCode, validationOutput);
     iterationCount++;
   }
 
   if (!validationOutput.success) {
     throw new Error('Validation step failed after 5 attempts');
   } else {
-    console.log(`Component generated successfully after ${iterationCount} attempts`);
+    console.log(`Component generated successfully after ${iterationCount} fix attempt ${'s' ? iterationCount > 1 : ''}`);
   }
 
   // Save to file step
-  const fileName = saveToFile(baseDir, sourceCode);
+  const fileName = saveToFile(baseDir, executionId, sourceCode);
   console.log(fileName);
   return fileName;
 }

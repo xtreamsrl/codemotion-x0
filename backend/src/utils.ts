@@ -1,7 +1,17 @@
-import { v4 as uuid } from 'uuid';
 import * as path from 'path';
 import fs from 'fs';
 
+export type PipelineInputs = {
+  userDescription: string;
+  framework: string;
+};
+
+/**
+ * Utils function to format a string with values
+ * @param templateString The string to format
+ * @param values The values to use for the formatting
+ * @returns The formatted string
+ */
 export function formatString(templateString: string, values: Record<string, string>) {
   let formattedString = templateString;
   for (const key in values) {
@@ -18,22 +28,41 @@ export function formatString(templateString: string, values: Record<string, stri
  * @returns The input without the markdown multiline code markup
  */
 export function removeMD(input: string): string {
-  // remove ```tsx from the first line and remove ``` from the last line
-  return input.replace(/^```tsx\n/, '').replace(/```$/, '');
+  return input.replace(/^```[tj]sx\n/, '').replace(/```$/, '');
 }
 
 /**
  * Utils function to save the content to a file
  * @param basePath The base path to save the file
+ * @param executionId The execution id to use as a file name
  * @param content The content to save
  * @returns The path to the saved file
  */
-export function saveToFile(basePath: string, content: string) {
+export function saveToFile(basePath: string, executionId: string, content: string) {
   if (!fs.existsSync(basePath)) {
     fs.mkdirSync(basePath);
   }
-  const filename = `${uuid()}.tsx`;
+  const filename = `${executionId}.tsx`;
   const filePath = path.join(basePath, filename);
   fs.writeFileSync(filePath, content);
   return filename;
+}
+
+/**
+ * Utils function to log the step data to a file
+ * @param executionId The execution id to use as a file name
+ * @param stepName The name of the step to log
+ * @param input The input data to log
+ * @param output The output data to log
+ * @returns void
+ */
+export function logStepData(executionId: string, stepName: string, input: any, output: any) {
+  const logPath = path.join(__dirname, 'tmp', 'logs');
+  if (!fs.existsSync(logPath)) {
+    fs.mkdirSync(logPath, { recursive: true });
+  }
+  const logFilePath = path.join(logPath, `${executionId}.json`);
+  const log = fs.existsSync(logFilePath) ? JSON.parse(fs.readFileSync(logFilePath, 'utf-8')) : {};
+  log[stepName] = { input, output };
+  fs.writeFileSync(logFilePath, JSON.stringify(log, null, 2));
 }
