@@ -7,6 +7,8 @@ import { saveToFile } from './tools/saveContentToFile';
 import path from 'path';
 import { removeMD } from './tools/removeMD';
 import { PipelineInputs } from './utils';
+import { validateComponentStep } from './steps/validationStep';
+import { fixErrorsStep } from './steps/fixErrorsStep';
 
 const baseDir = path.join(__dirname, '..', '..', 'frontend', 'src', 'generated');
 
@@ -34,13 +36,40 @@ export async function pipeline(inputs: PipelineInputs) {
   }
   console.log(generationOutput)
 
+  // Validation step
+  let sourceCode = removeMD(generationOutput);
+  let validationOutput = await validateComponentStep(sourceCode);
+  let iterationCount = 0;
+  const sourceCodeHistory = [sourceCode];
+  const validationHistory = [validationOutput];
+
+  while (!validationOutput.success && iterationCount < 5) {
+    console.error('Validation step failed:', validationOutput.errors);
+    const fixedSourceCode = await fixErrorsStep(openai, [],{
+      sourceCode,
+      errors: validationOutput.errors,
+      framework: inputs.framework,
+    });
+
+    if (!fixedSourceCode) {
+      throw new Error('Fix errors step failed');
+    }
+
+    sourceCode = removeMD(fixedSourceCode);
+    sourceCodeHistory.push(sourceCode);
+    validationOutput = await validateComponentStep(sourceCode);
+    validationHistory.push(validationOutput);
+    iterationCount++;
+  }
+
+  if (!validationOutput.success) {
+    throw new Error('Validation step failed after 5 attempts');
+  } else {
+    console.log(`Component generated successfully after ${iterationCount} attempts`);
+  }
+
   // Save to file step
-  const content = removeMD(generationOutput);
-  const fileName= saveToFile(baseDir, content);
-
-  // todo : validation step
-
-  return fileName;
+  return saveToFile(baseDir, sourceCode);
 }
 
 // Run the pipeline
