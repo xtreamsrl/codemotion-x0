@@ -3,6 +3,22 @@ import { v4 as uuid } from 'uuid';
 import * as path from 'path';
 import fs from 'fs';
 
+/**
+ * Utils function to save the content to a file
+ * @param basePath The base path to save the file
+ * @param content The content to save
+ * @returns The path to the saved file
+ */
+export function saveToFile(basePath: string, content: string) {
+  const filename = `${uuid()}.tsx`;
+  const filePath = path.join(basePath, filename);
+  fs.writeFileSync(filePath, content);
+  return filename;
+}
+
+/**
+ * Langchain tool to save the received content to a file
+ */
 export class SaveContentToFile extends Tool {
   name = 'SaveContentToFile';
   description = 'Save the received content to a file';
@@ -17,15 +33,7 @@ export class SaveContentToFile extends Tool {
     }
   }
 
-  private fileName(): string {
-    return `${uuid()}.tsx`;
-  }
-
   async _call(input: string): Promise<string> {
-    // todo move the clean
-    const filename = this.fileName();
-    const filePath = path.join(this.basePath, filename);
-    fs.writeFileSync(filePath, input);
-    return filename;
+    return saveToFile(this.basePath, input);
   }
 }

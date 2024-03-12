@@ -22,8 +22,8 @@ export async function pipeline(inputs: PipelineInputs) {
     new SaveContentToFile(baseDir),
   ]);
 
-  const filePath = await pipeline.invoke(inputs);
+  const fileName = await pipeline.invoke(inputs);
 
-  console.log(filePath);
-  return filePath;
+  console.log(fileName);
+  return fileName;
 }

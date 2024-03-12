@@ -21,7 +21,7 @@ export type Context = NewComponentDesignOutput & {
  * the usage reason generated in the design step.
  * @param inputs - The output of the design step
  */
-function retrieveContext(inputs: NewComponentDesignOutput): Context {
+function buildContext(inputs: NewComponentDesignOutput): Context {
   const context: ComponentContext[] = [];
   for (const suggestedComponent of inputs.useLibraryComponents) {
     const component = LIBRARY_COMPONENTS_METADATA.filter(componentMeta => componentMeta.name === suggestedComponent.libraryComponentName);
@@ -44,8 +44,11 @@ function retrieveContext(inputs: NewComponentDesignOutput): Context {
   };
 }
 
+/**
+ * Langchain wrapper for the buildContext function
+ */
 export function buildContextStep() {
   return new RunnableLambda<NewComponentDesignOutput, Context>({
-    func: retrieveContext
+    func: buildContext
   })
 }
