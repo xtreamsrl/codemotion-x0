@@ -10,16 +10,21 @@ import fs from 'fs';
  * @returns The path to the saved file
  */
 export function saveToFile(basePath: string, content: string) {
+  if (!fs.existsSync(basePath)) {
+    fs.mkdirSync(basePath);
+  }
   const filename = `${uuid()}.tsx`;
   const filePath = path.join(basePath, filename);
   fs.writeFileSync(filePath, content);
   return filename;
 }
 
+// --- Langchain ---
+
 /**
  * Langchain tool to save the received content to a file
  */
-export class SaveContentToFile extends Tool {
+export class SaveContentToFileTool extends Tool {
   name = 'SaveContentToFile';
   description = 'Save the received content to a file';
 
@@ -28,9 +33,6 @@ export class SaveContentToFile extends Tool {
   constructor(basePath: string) {
     super(...arguments)
     this.basePath = basePath;
-    if (!fs.existsSync(this.basePath)) {
-      fs.mkdirSync(this.basePath);
-    }
   }
 
   async _call(input: string): Promise<string> {

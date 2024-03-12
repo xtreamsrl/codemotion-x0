@@ -1,16 +1,6 @@
 import { HumanMessagePromptTemplate } from '@langchain/core/prompts';
 
-export type ComponentContextPromptInput = {
-  name: string;
-  description: string;
-  usageReason: string;
-  extension: string;
-  importCode: string;
-  info: string;
-  usageExamples: string;
-};
-
-export const componentContextPrompt = HumanMessagePromptTemplate.fromTemplate(
+export const rawComponentContextPrompt =
   `Suggested library component:
   Name: {name}
   Description: {description}
@@ -23,5 +13,9 @@ export const componentContextPrompt = HumanMessagePromptTemplate.fromTemplate(
   {info}
   Full code examples of how {name} can be used inside the new component:
   {usageExamples}
----\n`
-);
+---
+`;
+
+// --- Langchain ---
+
+export const componentContextPrompt = HumanMessagePromptTemplate.fromTemplate(rawComponentContextPrompt);

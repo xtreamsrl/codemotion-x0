@@ -10,10 +10,12 @@ export function removeMD(input: string): string {
   return input.replace(/^```tsx\n/, '').replace(/```$/, '');
 }
 
+// --- Langchain ---
+
 /**
  * Langchain tool to remove markdown multiline code markup from the generated content
  */
-export class RemoveMD extends Tool {
+export class RemoveMDTool extends Tool {
   name = 'RemoveMD';
   description = 'Remove the markdown from the received content';
 
