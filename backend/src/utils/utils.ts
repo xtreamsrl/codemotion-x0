@@ -1,10 +1,20 @@
 import * as path from 'path';
 import fs from 'fs';
+import LIBRARY_COMPONENTS_METADATA from '../data/components.json';
 
 export type PipelineInputs = {
   userDescription: string;
-  framework: string;
 };
+
+type ComponentMetadata = {
+  name: string;
+  description: string;
+  usageReason: string;
+  extension: string;
+  importCode: string;
+  info: string;
+  usageExamples: string;
+}
 
 /**
  * Utils function to format a string with values
@@ -65,4 +75,29 @@ export function logStepData(executionId: string, stepName: string, input: any, o
   const log = fs.existsSync(logFilePath) ? JSON.parse(fs.readFileSync(logFilePath, 'utf-8')) : {};
   log[stepName] = { input, output };
   fs.writeFileSync(logFilePath, JSON.stringify(log, null, 2));
+}
+
+/**
+ * Get the component metadata and format them to be used in the code generation step
+ * @param component The component to get the metadata for
+ * @returns The formatted component metadata
+ */
+export function getComponentMetadata(component: {
+  libraryComponentName: string;
+  libraryComponentUsageReason: string;
+}): ComponentMetadata {
+  console.log('Build context step started...');
+  const componentMetadata = LIBRARY_COMPONENTS_METADATA.filter(componentMeta => componentMeta.name === component.libraryComponentName);
+  if (componentMetadata.length === 0) {
+    throw new Error(`Component ${component.libraryComponentName} not found in the library`);
+  }
+  return {
+    name: componentMetadata[0].name,
+    description: componentMetadata[0].description,
+    usageReason: component.libraryComponentUsageReason,
+    extension: componentMetadata[0].extension,
+    importCode: componentMetadata[0].docs.import.code.trim(),
+    info: componentMetadata[0].docs.info.map(info => `\`\`\`${info.source}\n${info.code.trim()}\n\`\`\``).join('\n'),
+    usageExamples: componentMetadata[0].docs.examples.map(example => `\`\`\`${example.source}\n${example.code.trim()}\n\`\`\``).join('\n'),
+  };
 }
