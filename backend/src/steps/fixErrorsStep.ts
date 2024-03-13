@@ -9,7 +9,7 @@ and you have excellent analytical skills and problem-solving abilities. You are 
 Always return only the correct source code.`;
 
 const rawFixErrorsTaskPrompt =
-  `The following generated component has errors, fix them please.
+  `The following generated component has errors, fix them please. Respond only with the code and do not add any other explanation.
 Source code:
 {sourceCode}
 Errors:
