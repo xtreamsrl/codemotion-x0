@@ -1,5 +1,6 @@
 import * as path from 'path';
 import fs from 'fs';
+import { v4 as uuid } from 'uuid';
 import LIBRARY_COMPONENTS_METADATA from '../data/components.json';
 
 export type PipelineInputs = {
@@ -48,11 +49,11 @@ export function removeMD(input: string): string {
  * @param content The content to save
  * @returns The path to the saved file
  */
-export function saveToFile(basePath: string, executionId: string, content: string) {
+export function saveToFile(basePath: string, content: string, executionId?: string) {
   if (!fs.existsSync(basePath)) {
     fs.mkdirSync(basePath);
   }
-  const filename = `${executionId}.tsx`;
+  const filename = executionId ? `${executionId}.tsx` : `${uuid()}.tsx`;
   const filePath = path.join(basePath, filename);
   fs.writeFileSync(filePath, content);
   return filename;
