@@ -68,7 +68,7 @@ export function saveToFile(basePath: string, content: string, executionId?: stri
  * @returns void
  */
 export function logStepData(executionId: string, stepName: string, input: any, output: any) {
-  const logPath = path.join(__dirname, 'tmp', 'logs');
+  const logPath = path.join(__dirname, 'logs');
   if (!fs.existsSync(logPath)) {
     fs.mkdirSync(logPath, { recursive: true });
   }

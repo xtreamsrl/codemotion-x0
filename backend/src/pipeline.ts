@@ -1,5 +1,5 @@
-import { PipelineInputs } from './utils';
+import { PipelineInputs } from './utils/utils';
 
 export async function pipeline(inputs: PipelineInputs): Promise<string> {
-  return `${inputs.framework} - ${inputs.userDescription}`
+  return `${inputs.userDescription}`
 }
