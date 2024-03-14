@@ -16,3 +16,12 @@ export type ComponentMetadata = {
   info: string;
   usageExamples: string;
 }
+
+export type DesignNewComponentOutput = {
+  newComponentName: string;
+  newComponentDescription: string;
+  useLibraryComponents: {
+    libraryComponentName: string;
+    libraryComponentUsageReason: string;
+  }[]
+};

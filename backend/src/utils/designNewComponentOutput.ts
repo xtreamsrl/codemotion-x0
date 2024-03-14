@@ -1,14 +1,5 @@
 import LIBRARY_COMPONENTS_METADATA from '../data/components.json';
 
-export type DesignNewComponentOutput = {
-  newComponentName: string;
-  newComponentDescription: string;
-  useLibraryComponents: {
-    libraryComponentName: string;
-    libraryComponentUsageReason: string;
-  }[]
-};
-
 // JSON Schema to define the output of the design step
 export const designNewComponentOutputSchema = {
   type: 'object',
