@@ -3,7 +3,7 @@ export const designSystemPromptTemplate =
 Take into account every details specified in the user query.
 Use the provided library components to help you design the new component.`;
 
-export const designTaskPromptTemplate =
+export const designUserPromptTemplate =
   `User query: "{userDescription}"
 
 Available library components:

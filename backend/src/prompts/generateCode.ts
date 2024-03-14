@@ -4,7 +4,7 @@ Your task is to write a new React component for a web app, according to the prov
 You will write the full React component code, which should include all imports.
 Your generated code will be directly used in production.`;
 
-export const generateCodeTaskPromptTemplate =
+export const generateCodeUserPromptTemplate =
   `Design task details:
 - NEW COMPONENT NAME : {newComponentName}
 - NEW COMPONENT DESCRIPTION : {newComponentDescription}

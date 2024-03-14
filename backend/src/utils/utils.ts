@@ -74,7 +74,6 @@ export function getComponentMetadata(component: {
   libraryComponentName: string;
   libraryComponentUsageReason: string;
 }): ComponentMetadata {
-  console.log('Build context step started...');
   const componentMetadata = LIBRARY_COMPONENTS_METADATA.filter(componentMeta => componentMeta.name === component.libraryComponentName);
   if (componentMetadata.length === 0) {
     throw new Error(`Component ${component.libraryComponentName} not found in the library`);

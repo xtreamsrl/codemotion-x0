@@ -1,4 +1,4 @@
-import { pipeline } from './src/pipeline';
+import { pipeline } from '../src/pipeline';
 
 const userDescription =
   `Generate a list of 3 items with a searchbar and a select filter inline. 
