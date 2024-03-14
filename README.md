@@ -12,9 +12,11 @@ cd frontend
 pnpm i
 ```
 - Copy `sample.env` in `config.env`
-- Paste the OpenAI key from the chat into `config.env`
+- Paste the OpenAI API key from the chat into `config.env`
 
 ## Pipeline
+
+![The generation pipeline flow diagram](pipeline.png)
 
 ### Design Step
 `Generative Task`
@@ -24,6 +26,7 @@ pnpm i
 
 ```typescript
 async function designStep(inputs: PipelineInputs): Promise<DesignNewComponentOutput> {
+  // Retrieve context
   // Format prompts
   // Invoke llm
   // Parse/format output
@@ -33,11 +36,12 @@ async function designStep(inputs: PipelineInputs): Promise<DesignNewComponentOut
 ### Code Generation Step
 `Generative Task`
 
-- 
+- Code generation step where the user's request is converted into code
+- The components listed in the previous step are used to generate the code
 
 ```typescript
 async function codeGenerationStep(inputs: DesignNewComponentOutput): Promise<string> {
-  // Create context
+  // Retrieve context
   // Format prompts
   // Invoke llm
   // Parse/format output
@@ -47,12 +51,17 @@ async function codeGenerationStep(inputs: DesignNewComponentOutput): Promise<str
 ### Validation Step
 `Deterministic Task`
 
+- Sometimes llm can generate code that is not valid, this step is used to ensure that the code is valid
+- The code is checked with TypeScript compiler and rendered with `react-dom/server`
+
 ```typescript
-async function validationStep(sourceCode: string) {}
+async function validationStep(sourceCode: string): ValidationOutput {}
 ```
 
 ### Fix Errors Step
 `Generative Task`
+
+- If the generated code is not valid, this step is used to fix the errors
 
 ```typescript
 async function fixErrorsStep(sourceCode: string, errors: string[]): Promise<string> {
