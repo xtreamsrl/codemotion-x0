@@ -1,9 +1,10 @@
-import React, { JSXElementConstructor, Suspense, useState } from 'react';
+import React, { JSXElementConstructor, Suspense, useEffect, useState } from 'react';
 import logo from './logo.png';
 import './App.css';
 import { ThemeProvider } from './theme.tsx';
 import { Box } from '@xtreamsrl/react-ui-kit/Box';
-import { Button, Flex, TextInput, Typography } from '@xtreamsrl/react-ui-kit';
+import { Button, Flex, TextInput } from '@xtreamsrl/react-ui-kit';
+import GeneratedComponent from './GeneratedComponent';
 
 function App() {
 
@@ -11,6 +12,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [generated, setGenerated] = useState(false);
   const [Component, setComponent] = useState<JSXElementConstructor<any>>(() => <></>);
+  const [componentCode, setComponentCode] = useState<string>('');
 
   function generate() {
     setLoading(true);
@@ -21,9 +23,14 @@ function App() {
       },
       body: JSON.stringify({ description: prompt }),
     }).then(response => response.json()).then(data => {
-      setLoading(false);
-      setGenerated(true);
-      setComponent(React.lazy(() => import(`./generated/${data.path}`)));
+      setTimeout(() => {
+        setLoading(false);
+        setGenerated(true);
+        console.log('path:', `./generated/${data.path}`);
+        setComponent(React.lazy(() => import(`./generated/${data.path}`  /* @vite-ignore */)));
+        setComponentCode(data.code);
+      }, 1000)
+
     }).catch(error => {
       setLoading(false);
       console.error('Error:', error);
@@ -44,15 +51,15 @@ function App() {
               <img src={logo}/>
             </Box>
             <TextInput label="Prompt" name="prompt" value={prompt} onChange={(e) => setPrompt(e.target.value)}/>
-            <Button onClick={() => generate()}>Generate</Button>
+            <Button loading={loading} onClick={() => generate()}>Generate</Button>
           </Flex>
         ) : (
-          <Flex direction="column" gap="md-2">
-            <Typography>{prompt}</Typography>
-            <Box>
-              {React.createElement(Component)}
-            </Box>
-          </Flex>
+
+          <GeneratedComponent prompt={prompt} Component={Component} componentCode={componentCode} onNewGeneration={()=>{
+            setGenerated(false);
+            setComponent(() => <></>);
+            setPrompt('');
+          }}/>
         )}
 
       </ThemeProvider>
