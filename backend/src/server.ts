@@ -21,7 +21,7 @@ const fastify = Fastify({
     };
     const result = await pipeline(inputs);
 
-    reply.send({ path: result });
+    reply.send(result);
   });
 
   // Run the server!

@@ -7,6 +7,11 @@ export type PipelineInputs = {
   userDescription: string;
 };
 
+export type PipelineOutput = {
+  code: string;
+  path: string;
+};
+
 type ComponentMetadata = {
   name: string;
   description: string;
