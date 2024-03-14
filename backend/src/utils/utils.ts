@@ -2,25 +2,7 @@ import * as path from 'path';
 import fs from 'fs';
 import { v4 as uuid } from 'uuid';
 import LIBRARY_COMPONENTS_METADATA from '../data/components.json';
-
-export type PipelineInputs = {
-  userDescription: string;
-};
-
-export type PipelineOutput = {
-  code: string;
-  path: string;
-};
-
-type ComponentMetadata = {
-  name: string;
-  description: string;
-  usageReason: string;
-  extension: string;
-  importCode: string;
-  info: string;
-  usageExamples: string;
-}
+import { ComponentMetadata } from './types';
 
 /**
  * Utils function to format a string with values
