@@ -1,5 +1,5 @@
-import { validate } from '../src/steps/validationStep';
 import fs from 'fs';
+import { validate } from 'uuid';
 
 (() => {
   const sourceFile = '';
