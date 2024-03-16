@@ -1,6 +1,6 @@
-import * as ts from 'typescript';
-import * as fs from 'fs';
-import * as path from 'path';
+import ts from 'typescript';
+import fs from 'fs';
+import path from 'path';
 import ReactDom from 'react-dom/server';
 import { ThemeProvider } from './theme';
 import React from 'react';
@@ -27,7 +27,11 @@ export type ValidationOutput = {
  */
 function transpileTypeScript(sourceCode: string): TranspileTypeScriptOutput {
   // Write the source code to a temporary file
-  const tempFilePath = path.join(__dirname, '..', './tmp', 'tempFile.tsx');
+  const tempDir = path.join(__dirname, '..', './tmp');
+  if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir);
+  }
+  const tempFilePath = path.join(tempDir, 'tempFile.tsx');
   fs.writeFileSync(tempFilePath, sourceCode);
 
   // Specify compiler options
@@ -74,9 +78,6 @@ function transpileTypeScript(sourceCode: string): TranspileTypeScriptOutput {
         return `(line ${line + 1}, column ${character + 1}): ${message}`;
       });
 
-    // Remove the temporary file
-    fs.unlinkSync(tempFilePath);
-
     if (errors.length > 0) {
       return {
         tsErrors: errors,
@@ -104,7 +105,11 @@ function transpileTypeScript(sourceCode: string): TranspileTypeScriptOutput {
  */
 function testRenderComponent(jsxSourceCode: string): RenderComponentOutput {
   // Write the transpiled JavaScript to a temporary file
-  const tempFilePath = path.join(__dirname, '..', './tmp', 'tempFile.tsx');
+  const tempDir = path.join(__dirname, '..', './tmp');
+  if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir);
+  }
+  const tempFilePath = path.join(tempDir, 'tempFile.jsx');
   fs.writeFileSync(tempFilePath, jsxSourceCode, 'utf8');
 
   // Dynamically import the temporary file as a module
@@ -124,9 +129,8 @@ function testRenderComponent(jsxSourceCode: string): RenderComponentOutput {
         errors: [error.message],
       };
     } else throw error;
-  } finally {
-    fs.unlinkSync(tempFilePath);
   }
+
   return {
     success: true,
     errors: [],
