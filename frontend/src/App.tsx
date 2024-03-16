@@ -1,4 +1,4 @@
-import React, { JSXElementConstructor, Suspense, useEffect, useState } from 'react';
+import React, { JSXElementConstructor, Suspense, useState } from 'react';
 import logo from './logo.png';
 import './App.css';
 import { ThemeProvider } from './theme.tsx';
