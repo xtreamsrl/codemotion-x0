@@ -55,7 +55,11 @@ async function codeGenerationStep(inputs: DesignNewComponentOutput): Promise<str
 - The TypeScript source code is checked and transpiled to JSX to be rendered with `react-dom/server` API
 
 ```typescript
-function validationStep(sourceCode: string): ValidationOutput {}
+function validationStep(sourceCode: string): ValidationOutput {
+  // Validate and transpile TypeScript source code to JavaScript
+  // Test JSX rendering
+  // Return validation output
+}
 ```
 
 ### Fix Errors Step

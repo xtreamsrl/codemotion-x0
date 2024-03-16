@@ -132,11 +132,10 @@ function testRenderComponent(jsxSourceCode: string): RenderComponentOutput {
 }
 
 /**
- * Validation step to test the TypeScript source code and component rendering errors
- * @param sourceCode The TypeScript source code to validate
+ * Validate and transpile TypeScript source code to JavaScript, then test JSX rendering
+ * @param sourceCode The TypeScript source code to validate, transpile and render
  */
-export function validationStep(sourceCode: string): ValidationOutput {
-  console.log('Validation step started...');
+export function validate(sourceCode: string): ValidationOutput {
   const errors = [];
   let success = true;
   const { jsxSourceCode, tsErrors } = transpileTypeScript(sourceCode);
@@ -153,11 +152,6 @@ export function validationStep(sourceCode: string): ValidationOutput {
       success = false;
       errors.push(...renderOutput.errors);
     }
-  }
-  if (errors.length > 0) {
-    console.error(`Validation step completed with errors:\n${errors.join('\n')}.`);
-  } else {
-    console.log('Validation step successfully completed.');
   }
   return {
     success,
