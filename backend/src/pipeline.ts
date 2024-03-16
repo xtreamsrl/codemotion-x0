@@ -1,6 +1,7 @@
 import { PipelineInputs, PipelineOutput } from './utils/types';
 import { designStep } from './steps/designStep';
 import { codeGenerationStep } from './steps/codeGenerationStep';
+import { saveGeneratedFile } from './utils/utils';
 
 export async function pipeline(inputs: PipelineInputs): Promise<PipelineOutput> {
   const designOutput = await designStep(inputs);
@@ -9,8 +10,9 @@ export async function pipeline(inputs: PipelineInputs): Promise<PipelineOutput> 
   const sourceCode = await codeGenerationStep(designOutput);
   console.log(sourceCode);
 
+  const path = saveGeneratedFile(sourceCode);
   return {
-    code: 'console.log("Hello, World!")',
-    path: 'path/to/file.tsx',
+    code: sourceCode,
+    path,
   };
 }
