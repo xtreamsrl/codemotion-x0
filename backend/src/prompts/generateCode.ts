@@ -1,10 +1,12 @@
-export const generateCodeSystemPromptTemplate =
+import { makePromptTemplate } from '../utils/utils';
+
+export const generateCodeSystemPrompt =
   `You are an expert Software Engineer with an extensive knowledge of web development with the React framework.
 Your task is to write a new React component for a web app, according to the provided task details.
 You will write the full React component code, which should include all imports.
 Your generated code will be directly used in production.`;
 
-export const generateCodeUserPromptTemplate =
+const generateCodeUserPrompt =
   `Design task details:
 - NEW COMPONENT NAME : {newComponentName}
 - NEW COMPONENT DESCRIPTION : {newComponentDescription}
@@ -16,7 +18,10 @@ Important :
 - DO NOT HAVE ANY DYNAMIC DATA OR DATA PROPS! Components are meant to be working as is without supplying any variable to them when importing them! Only write a component that render directly with placeholders as data.
 Take a deep breath and write the React component code as the creative genius and experienced Software Engineer you are.`;
 
-export const componentMetadataPromptTemplate =
+export const generateCodeUserPromptTemplate =
+  makePromptTemplate<'newComponentName' | 'newComponentDescription'>(generateCodeUserPrompt);
+
+const componentMetadataPrompt =
   `Suggested library component:
   Name: {name}
   Description: {description}
@@ -31,3 +36,6 @@ export const componentMetadataPromptTemplate =
   {usageExamples}
 ---
 `;
+
+export const componentMetadataPromptTemplate =
+  makePromptTemplate<'name' | 'description' | 'usageReason' | 'extension' | 'importCode' | 'info' | 'usageExamples'>(componentMetadataPrompt);

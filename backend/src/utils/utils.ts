@@ -10,7 +10,7 @@ import { ComponentMetadata } from './types';
  * @param values The values to use for the formatting
  * @returns The formatted string
  */
-export function formatString(templateString: string, values: Record<string, string>) {
+function formatString(templateString: string, values: Record<string, string>) {
   let formattedString = templateString;
   for (const key in values) {
     const placeholder = `{${key}}`;
@@ -18,6 +18,19 @@ export function formatString(templateString: string, values: Record<string, stri
     formattedString = formattedString.replace(new RegExp(placeholder, 'g'), value);
   }
   return formattedString;
+}
+
+/**
+ * Utils function to create a prompt template
+ * @param prompt The prompt to create the template for
+ * @returns The prompt template
+ */
+export function makePromptTemplate<K extends string>(prompt: string): { format: (values: Record<K, string>) => string } {
+  return {
+    format: (values: Record<K, string>): string => {
+      return formatString(prompt, values);
+    },
+  };
 }
 
 /**

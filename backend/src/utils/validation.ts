@@ -23,6 +23,7 @@ export type ValidationOutput = {
 /**
  * Utils function to validate and transpile TS source code to JS
  * @param sourceCode The TypeScript source code to validate and transpile
+ * @returns The transpiled JavaScript source code or any TypeScript errors
  */
 function transpileTypeScript(sourceCode: string): TranspileTypeScriptOutput {
   // Write the source code to a temporary file
@@ -99,6 +100,7 @@ function transpileTypeScript(sourceCode: string): TranspileTypeScriptOutput {
 /**
  * Utils function to render the component from the transpiled JavaScript and check for errors
  * @param jsxSourceCode The transpiled JavaScript source code to render
+ * @returns The success status and any rendering errors
  */
 function testRenderComponent(jsxSourceCode: string): RenderComponentOutput {
   // Write the transpiled JavaScript to a temporary file
@@ -134,6 +136,7 @@ function testRenderComponent(jsxSourceCode: string): RenderComponentOutput {
 /**
  * Validate and transpile TypeScript source code to JavaScript, then test JSX rendering
  * @param sourceCode The TypeScript source code to validate, transpile and render
+ * @returns The validation success status and any errors
  */
 export function validate(sourceCode: string): ValidationOutput {
   const errors = [];

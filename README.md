@@ -27,7 +27,7 @@ pnpm i
 ```typescript
 async function designStep(inputs: PipelineInputs): Promise<DesignNewComponentOutput> {
   // Retrieve context
-  // Format prompts
+  // Prepare prompt messages
   // Invoke llm
   // Parse/format output
 }
@@ -42,7 +42,7 @@ async function designStep(inputs: PipelineInputs): Promise<DesignNewComponentOut
 ```typescript
 async function codeGenerationStep(inputs: DesignNewComponentOutput): Promise<string> {
   // Retrieve context
-  // Format prompts
+  // Prepare prompt messages
   // Invoke llm
   // Parse/format output
 }
@@ -69,7 +69,7 @@ function validationStep(sourceCode: string): ValidationOutput {
 
 ```typescript
 async function fixErrorsStep(sourceCode: string, errors: string[]): Promise<string> {
-  // Format prompts
+  // Prepare prompt messages
   // Invoke llm
   // Parse/format output
 }
