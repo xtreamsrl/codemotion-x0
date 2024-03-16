@@ -43,20 +43,20 @@ export function removeMD(input: string): string {
 }
 
 /**
- * Utils function to save the content to a file
- * @param basePath The base path to save the file
- * @param executionId The execution id to use as a file name
- * @param content The content to save
- * @returns The path to the saved file
+ * Utils function to save the generated source code to a file in the frontend project directory and return the path
+ * @param sourceCode The source code to save
+ * @returns The execution id
  */
-export function saveToFile(basePath: string, content: string, executionId?: string) {
+export function saveGeneratedFile(sourceCode: string) {
+  const basePath = path.join(__dirname, '..', '..', '..', 'frontend', 'src', 'generated');
   if (!fs.existsSync(basePath)) {
     fs.mkdirSync(basePath);
   }
-  const filename = executionId ? `${executionId}.tsx` : `${uuid()}.tsx`;
-  const filePath = path.join(basePath, filename);
-  fs.writeFileSync(filePath, content);
-  return filename;
+  const executionId = uuid();
+  const fileName = `${executionId}.tsx`;
+  const filePath = path.join(basePath, fileName);
+  fs.writeFileSync(filePath, sourceCode);
+  return fileName;
 }
 
 /**
