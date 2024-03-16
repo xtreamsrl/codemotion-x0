@@ -12,15 +12,17 @@ async function getChatCompletion(messages: ReadonlyArray<{
       model: 'gpt-4-turbo-preview',
       messages: messages,
     }),
-  }).then(response => response.json())
-    .then(data => data.choices[0].message.content);
+  }).then(response => response.json());
 }
 
 const messages = [
-  { role: 'system', content: "You are a helpful assistant." },
+  { role: 'system', content: 'You are a helpful assistant.' },
   { role: 'user', content: 'What is Codemotion?' },
   { role: 'assistant', content: 'Codemotion is one of the largest tech conferences in Europe, primarily focused on software development and emerging technologies.' },
   { role: 'user', content: 'When was it founded?' }
 ] as const;
 
-getChatCompletion(messages).then(console.log);
+getChatCompletion(messages).then( response => {
+  const result = response.choices[0].message.content;
+  console.log(result);
+});

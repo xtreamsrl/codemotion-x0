@@ -6,9 +6,8 @@
   "scripts": {
     "serve": "tsx --env-file=config.env src/server.ts",
     "watch": "tsx watch --env-file=config.env src/server.ts",
-    "run-pipeline": "tsx --env-file=config.env runPipeline.ts",
-    "rawApiExample": "tsx --env-file=config.env examples/rawOpenaiApi.ts"
     "openai-api-example": "tsx --env-file=config.env scripts/openaiApi.ts",
+    "openai-tools-example": "tsx --env-file=config.env scripts/openaiApiWithTools.ts",
     "run-pipeline": "tsx --env-file=config.env scripts/runPipeline.ts",
     "run-validate": "tsx --env-file=config.env scripts/runValidation.ts"
   },
