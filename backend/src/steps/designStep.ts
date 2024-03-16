@@ -1,9 +1,10 @@
-import { PipelineInputs } from '../utils/types';
+import { DesignNewComponentOutput, PipelineInputs } from '../utils/types';
 import { designSystemPrompt, designUserPromptTemplate } from '../prompts/designNewComponent';
 import OpenAI from 'openai';
 import COMPONENT_METADATA from '../data/components.json';
+import { designNewComponentOutputSchema } from '../utils/designNewComponentOutput';
 
-export async function designStep(inputs: PipelineInputs): Promise<string> {
+export async function designStep(inputs: PipelineInputs): Promise<DesignNewComponentOutput> {
   // Retrieve context
   const componentList = COMPONENT_METADATA.map(
     (component) => `${component.name} : ${component.description}`,
@@ -24,12 +25,21 @@ export async function designStep(inputs: PipelineInputs): Promise<string> {
   const chatCompletion = await openaiClient.chat.completions.create({
     model: 'gpt-4-turbo-preview',
     messages,
+    tools: [{
+      type: 'function',
+      function: {
+        name: 'designNewComponentFromDescription',
+        description: 'Generate the required design details to create a new component',
+        parameters: designNewComponentOutputSchema,
+      },
+    }],
+    tool_choice: { type: 'function', function: { name: 'designNewComponentFromDescription' } }
   });
 
   // Parse/format output
-  const designOutput = chatCompletion.choices[0].message.content;
+  const designOutput = chatCompletion.choices[0].message.tool_calls?.[0].function.arguments
   if (!designOutput) {
     throw new Error('Failed to generate design output');
   }
-  return designOutput;
+  return JSON.parse(designOutput) as DesignNewComponentOutput;
 }
