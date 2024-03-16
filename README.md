@@ -51,11 +51,11 @@ async function codeGenerationStep(inputs: DesignNewComponentOutput): Promise<str
 ### Validation Step
 `Deterministic Task`
 
-- Sometimes llm can generate code that is not valid, this step is used to ensure that the code is valid
-- The code is checked with TypeScript compiler and rendered with `react-dom/server`
+- Sometimes llm can generate code that is not valid, this step is used to ensure that the generated code is valid
+- The TypeScript source code is checked and transpiled to JSX to be rendered with `react-dom/server` API
 
 ```typescript
-async function validationStep(sourceCode: string): ValidationOutput {}
+function validationStep(sourceCode: string): ValidationOutput {}
 ```
 
 ### Fix Errors Step
