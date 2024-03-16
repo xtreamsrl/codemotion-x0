@@ -6,6 +6,7 @@ import { Typography } from '@xtreamsrl/react-ui-kit/Typography';
 import { Icon } from '@xtreamsrl/react-ui-kit/Icon';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { Button } from '@xtreamsrl/react-ui-kit';
+import ErrorBoundary from '../ErrorBoundary';
 
 type Props = {
   prompt: string;
@@ -37,7 +38,9 @@ const GeneratedComponent: React.FC<Props> = ({
 
       <Tabs.Panel index={0} currentTab={currentTab}>
         <Box>
-          {React.createElement(Component)}
+          <ErrorBoundary>
+            {React.createElement(Component)}
+          </ErrorBoundary>
         </Box>
       </Tabs.Panel>
       <Tabs.Panel index={1} currentTab={currentTab}>
