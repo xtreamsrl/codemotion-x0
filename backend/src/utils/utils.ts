@@ -25,7 +25,9 @@ function formatString(templateString: string, values: Record<string, string>) {
  * @param prompt The prompt to create the template for
  * @returns The prompt template
  */
-export function makePromptTemplate<K extends string>(prompt: string): { format: (values: Record<K, string>) => string } {
+export function makePromptTemplate<K extends string>(prompt: string): {
+  format: (values: Record<K, string>) => string
+} {
   return {
     format: (values: Record<K, string>): string => {
       return formatString(prompt, values);
@@ -56,6 +58,19 @@ export function saveGeneratedFile(sourceCode: string) {
   const fileName = `${executionId}.tsx`;
   const filePath = path.join(basePath, fileName);
   fs.writeFileSync(filePath, sourceCode);
+  return fileName;
+}
+
+/**
+ * Utils function to save the fixed source code to a file in the frontend project directory and return the path
+ * @param originalFilePath The original file path
+ * @param sourceCode The new source code
+ * @param iteration The fix iteration number
+ */
+export function saveFixIteration(originalFilePath: string, sourceCode: string, iteration = 0) {
+  const filePath = originalFilePath.replace('.tsx', `-fix${iteration}.tsx`);
+  fs.writeFileSync(filePath, sourceCode);
+  const fileName = path.basename(filePath);
   return fileName;
 }
 
