@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { validate } from 'uuid';
+import { validate } from '../src/utils/validation';
 
 (() => {
   const sourceFile = '';
