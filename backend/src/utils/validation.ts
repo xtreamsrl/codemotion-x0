@@ -4,6 +4,7 @@ import path from 'path';
 import ReactDom from 'react-dom/server';
 import { ThemeProvider } from './theme';
 import React from 'react';
+import { v4 as uuid } from 'uuid';
 
 type TranspileTypeScriptOutput = {
   jsxSourceCode?: string;
@@ -47,11 +48,8 @@ function transpileTypeScript(sourceCode: string): TranspileTypeScriptOutput {
     esModuleInterop: true,
     isolatedModules: true,
     noEmit: true,
+    noErrorTruncation: true,
     jsx: ts.JsxEmit.ReactJSX,
-    strict: true,
-    noUnusedLocals: true,
-    noUnusedParameters: true,
-    noFallthroughCasesInSwitch: true,
   };
 
   const libFiles = [
@@ -109,7 +107,8 @@ function testRenderComponent(jsxSourceCode: string): RenderComponentOutput {
   if (!fs.existsSync(tempDir)) {
     fs.mkdirSync(tempDir);
   }
-  const tempFilePath = path.join(tempDir, 'tempFile.jsx');
+  const id = uuid();
+  const tempFilePath = path.join(tempDir, `${id}.jsx`);
   fs.writeFileSync(tempFilePath, jsxSourceCode, 'utf8');
 
   // Dynamically import the temporary file as a module
@@ -126,9 +125,11 @@ function testRenderComponent(jsxSourceCode: string): RenderComponentOutput {
     if (error instanceof Error) {
       return {
         success: false,
-        errors: [error.message],
+        errors: [error.stack|| error.message],
       };
     } else throw error;
+  } finally {
+    fs.unlinkSync(tempFilePath);
   }
 
   return {
