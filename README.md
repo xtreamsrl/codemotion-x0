@@ -1,24 +1,35 @@
 # Create your own v0 exploiting generative AI
 
 ## Setup
-- Install backend project dependencies
-```shell
-cd backend
-pnpm i
-```
-- Install frontend project dependencies
-```shell
-cd frontend
-pnpm i
-```
-- Copy `sample.env` in `config.env`
-- Paste the OpenAI API key from the chat into `config.env`
+
+1. Install backend project dependencies
+    ```shell
+    cd backend
+    pnpm i
+    ```
+2. Install frontend project dependencies
+    ```shell
+    cd ../frontend
+    pnpm i
+    ```
+3. Copy `sample.env` in `config.env`
+4. Paste the OpenAI API key from the chat into `config.env`
+
+## Workshop checkpoints
+
+Start from the `main` branch and checkout the following branches to see the code changes for each step:
+
+- 1-design-step-simple
+- 2-design-step-structured-output
+- 3-code-generation-step
+- 4-fix-errors-step
 
 ## Pipeline
 
 ![The generation pipeline flow diagram](pipeline.png)
 
 ### Design Step
+
 `Generative Task`
 
 - A preliminary ideation step where no code is involved
@@ -34,6 +45,7 @@ async function designStep(inputs: PipelineInputs): Promise<DesignNewComponentOut
 ```
 
 ### Code Generation Step
+
 `Generative Task`
 
 - Code generation step where the user's request is converted into code
@@ -49,6 +61,7 @@ async function codeGenerationStep(inputs: DesignNewComponentOutput): Promise<str
 ```
 
 ### Validation Step
+
 `Deterministic Task`
 
 - Sometimes llm can generate code that is not valid, this step is used to ensure that the generated code is valid
@@ -63,6 +76,7 @@ function validationStep(sourceCode: string): ValidationOutput {
 ```
 
 ### Fix Errors Step
+
 `Generative Task`
 
 - If the generated code is not valid, this step is used to fix the errors
