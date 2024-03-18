@@ -11,8 +11,8 @@ const designUserPrompt =
 Available library components:
 {libraryComponents}
 
-Take a deep breath and design the new React web component as the creative genius you are.
-`;
+Return the list of components from the provided library you are going to use to create the new component requested by the user.
+Take a deep breath and design the new React web component as the creative genius you are.`;
 
 export const designUserPromptTemplate =
   makePromptTemplate<'userDescription' | 'libraryComponents'>(designUserPrompt);
