@@ -1,5 +1,6 @@
 import React, { JSXElementConstructor, Suspense, useState } from 'react';
-import logo from './logo.png';
+import logox from './logo-blu_new_green.svg';
+import logoc from './codemotion-wf.svg';
 import './App.css';
 import { ThemeProvider } from './theme.tsx';
 import { Box } from '@xtreamsrl/react-ui-kit/Box';
@@ -29,7 +30,7 @@ function App() {
         console.log('path:', `./generated/${data.path}`);
         setComponent(React.lazy(() => import(`./generated/${data.path}`  /* @vite-ignore */)));
         setComponentCode(data.code);
-      }, 1000)
+      }, 1000);
 
     }).catch(error => {
       setLoading(false);
@@ -44,22 +45,28 @@ function App() {
   return (
     <Suspense>
       <ThemeProvider>
-        {loading && <div>Loading...</div>}
         {!generated ? (
           <Flex direction="column" gap="md-2">
-            <Box>
-              <img src={logo}/>
-            </Box>
+            <Flex direction="column" alignItems="center" gap="sm-8">
+              <Box width="30%">
+                <img style={{ width: '100%' }} src={logox}/>
+              </Box>
+              <Box>FOR</Box>
+              <Box width="60%">
+                <img style={{ width: '100%' }} src={logoc}/>
+              </Box>
+            </Flex>
             <TextInput label="Prompt" name="prompt" value={prompt} onChange={(e) => setPrompt(e.target.value)}/>
             <Button loading={loading} onClick={() => generate()}>Generate</Button>
           </Flex>
         ) : (
 
-          <GeneratedComponent prompt={prompt} Component={Component} componentCode={componentCode} onNewGeneration={()=>{
-            setGenerated(false);
-            setComponent(() => <></>);
-            setPrompt('');
-          }}/>
+          <GeneratedComponent prompt={prompt} Component={Component} componentCode={componentCode}
+                              onNewGeneration={() => {
+                                setGenerated(false);
+                                setComponent(() => <></>);
+                                setPrompt('');
+                              }}/>
         )}
 
       </ThemeProvider>
