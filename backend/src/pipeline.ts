@@ -1,7 +1,7 @@
 import { PipelineInputs, PipelineOutput } from './utils/types';
 import { designStep } from './steps/designStep';
 import { codeGenerationStep } from './steps/codeGenerationStep';
-import { saveGeneratedFile } from './utils/utils';
+import { saveFixIteration, saveGeneratedFile } from './utils/utils';
 import { validate } from './utils/validation';
 import { fixErrorsStep } from './steps/fixErrorsStep';
 
@@ -11,10 +11,20 @@ export async function pipeline(inputs: PipelineInputs): Promise<PipelineOutput> 
 
   let sourceCode = await codeGenerationStep(designOutput);
   console.log(sourceCode);
-  const validationOutput = validate(sourceCode);
+  let validationOutput = validate(sourceCode);
+
+  const maxRetries = 5;
+  let iterationCount = 0;
+  while (!validationOutput.success && iterationCount < maxRetries) {
+    const fixedCode = await fixErrorsStep(sourceCode, validationOutput.errors);
+    sourceCode = fixedCode;
+    iterationCount++;
+    console.log(fixedCode);
+    validationOutput = validate(fixedCode);
+    console.log(validationOutput);
+  }
   if (!validationOutput.success) {
-    const fixedSourceCode = await fixErrorsStep(sourceCode, validationOutput.errors);
-    sourceCode = fixedSourceCode;
+    throw new Error('Autofix failed');
   }
 
   const path = saveGeneratedFile(sourceCode);
