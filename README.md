@@ -12,8 +12,8 @@
     cd ../frontend
     pnpm i
     ```
-3. Copy `sample.env` in `config.env`
-4. Paste the OpenAI API key from the chat into `config.env`
+3. Copy `backend/sample.env` in `backend/config.env`
+4. Paste the OpenAI API key from the chat into `backend/config.env`
 
 ## Workshop checkpoints
 
@@ -23,8 +23,9 @@ Start from the `main` branch and checkout the following branches to see the code
 - 2-design-step-structured-output
 - 3-code-generation-step
 - 4-fix-errors-step
+- 5-fix-errors-iteratively-step
 
-## Pipeline
+## Pipeline prototype
 
 ![The generation pipeline flow diagram](pipeline.png)
 
@@ -36,7 +37,9 @@ Start from the `main` branch and checkout the following branches to see the code
 - The user's request is enriched and converted into a list of components from our component library to be used
 
 ```typescript
-async function designStep(inputs: PipelineInputs): Promise<DesignNewComponentOutput> {
+import { DesignNewComponentOutput, PipelineInputs } from '../utils/types';
+
+export async function designStep(inputs: PipelineInputs): Promise<DesignNewComponentOutput> {
   // Retrieve context
   // Prepare prompt messages
   // Invoke llm
@@ -52,7 +55,9 @@ async function designStep(inputs: PipelineInputs): Promise<DesignNewComponentOut
 - The components listed in the previous step are used to generate the code
 
 ```typescript
-async function codeGenerationStep(inputs: DesignNewComponentOutput): Promise<string> {
+import { DesignNewComponentOutput } from '../utils/types';
+
+export async function codeGenerationStep(inputs: DesignNewComponentOutput): Promise<string> {
   // Retrieve context
   // Prepare prompt messages
   // Invoke llm
@@ -68,7 +73,9 @@ async function codeGenerationStep(inputs: DesignNewComponentOutput): Promise<str
 - The TypeScript source code is checked and transpiled to JSX to be rendered with `react-dom/server` API
 
 ```typescript
-function validationStep(sourceCode: string): ValidationOutput {
+import { ValidationOutput } from '../utils/validation';
+
+export function validationStep(sourceCode: string): ValidationOutput {
   // Validate and transpile TypeScript source code to JavaScript
   // Test JSX rendering
   // Return validation output
@@ -82,7 +89,7 @@ function validationStep(sourceCode: string): ValidationOutput {
 - If the generated code is not valid, this step is used to fix the errors
 
 ```typescript
-async function fixErrorsStep(sourceCode: string, errors: string[]): Promise<string> {
+export async function fixErrorsStep(sourceCode: string, errors: string[]): Promise<string> {
   // Prepare prompt messages
   // Invoke llm
   // Parse/format output
