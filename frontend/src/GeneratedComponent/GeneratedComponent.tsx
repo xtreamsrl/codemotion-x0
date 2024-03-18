@@ -3,9 +3,8 @@ import { Box } from '@xtreamsrl/react-ui-kit/Box';
 import { Flex } from '@xtreamsrl/react-ui-kit/Flex';
 import { Tabs } from '@xtreamsrl/react-ui-kit/Tabs';
 import { Typography } from '@xtreamsrl/react-ui-kit/Typography';
-import { Icon } from '@xtreamsrl/react-ui-kit/Icon';
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import { Button } from '@xtreamsrl/react-ui-kit';
+import { Button } from '@xtreamsrl/react-ui-kit/Button';
 import ErrorBoundary from '../ErrorBoundary';
 
 type Props = {
@@ -31,7 +30,7 @@ const GeneratedComponent: React.FC<Props> = ({
         <Button onClick={() => onNewGeneration()}>New Component</Button>
       </Flex>
       <Tabs size="sm" currentTab={currentTab} fullWidth onChange={(_, t) => setCurrentTab(t)}>
-        <Tabs.Tab icon={<Icon name="Home"/>} value={0}>Result</Tabs.Tab>
+        <Tabs.Tab value={0}>Result</Tabs.Tab>
         <Tabs.Tab value={1}>Code</Tabs.Tab>
       </Tabs>
 
