@@ -12,8 +12,8 @@ dependencies:
     specifier: ^9.0.1
     version: 9.0.1
   '@xtreamsrl/react-ui-kit':
-    specifier: ^0.10.3
-    version: 0.10.3(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(@mui/system@5.15.12)(@types/react@18.2.65)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^0.11.0
+    version: 0.11.0(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(@mui/system@5.15.12)(@types/react@18.2.65)(react-dom@18.2.0)(react@18.2.0)
   fastify:
     specifier: ^4.26.2
     version: 4.26.2
@@ -780,8 +780,8 @@ packages:
     resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
     dev: true
 
-  /@xtreamsrl/react-ui-kit@0.10.3(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(@mui/system@5.15.12)(@types/react@18.2.65)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-Tco8Xu3ObaXNFWjPHHc9AaGcd+1CdEIvbDW1Be6DsW6hy/yvOqfQsStWgR0N8G+dgNfVFd+jOivgz5U8H/h2mA==}
+  /@xtreamsrl/react-ui-kit@0.11.0(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(@mui/system@5.15.12)(@types/react@18.2.65)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-p3pfSddxG79QoXh9rgGsw1VdqnkGZnLV1ZksbrRAmFGWlTpOsNw8Npr9wIN9/b4WLT0AziUkI+Br50XJkJED1g==}
     peerDependencies:
       react: ^16.0.0 || ^17.0.0 || ^18.0.0
     dependencies:
