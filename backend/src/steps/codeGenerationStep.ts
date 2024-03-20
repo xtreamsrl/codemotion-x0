@@ -1,26 +1,26 @@
 import { DesignNewComponentOutput } from '../utils/types';
-import {
-  componentMetadataPromptTemplate,
-  generateCodeSystemPrompt,
-  generateCodeUserPromptTemplate,
-} from '../prompts/generateCode';
 import OpenAI from 'openai';
 import { getComponentMetadata, removeMD } from '../utils/utils';
+import {
+  codeGenerationSystemPrompt,
+  codeGenerationUserPromptTemplate,
+  componentMetadataPromptTemplate,
+} from '../prompts/codeGeneration';
 
 export async function codeGenerationStep(inputs: DesignNewComponentOutput): Promise<string> {
   // Retrieve context
   const componentMetadata = inputs.useLibraryComponents.map(componentMetadata => getComponentMetadata(componentMetadata));
 
   // Format prompts
-  const codeGenerationUserPrompt = generateCodeUserPromptTemplate.format({
+  const codeGenerationUserPrompt = codeGenerationUserPromptTemplate.format({
     newComponentName: inputs.newComponentName,
     newComponentDescription: inputs.newComponentDescription,
   });
   const componentMetadataMessages = componentMetadata.map(metadata => (
-    { role: 'user' as const, content: componentMetadataPromptTemplate.format(metadata)}
+    { role: 'user' as const, content: componentMetadataPromptTemplate.format(metadata) }
   ));
   const messages = [
-    { role: 'system' as const, content: generateCodeSystemPrompt },
+    { role: 'system' as const, content: codeGenerationSystemPrompt },
     ...componentMetadataMessages,
     { role: 'user' as const, content: codeGenerationUserPrompt },
   ];
