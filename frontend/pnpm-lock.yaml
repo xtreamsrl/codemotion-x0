@@ -15,8 +15,8 @@ dependencies:
     specifier: ^5.0.10
     version: 5.0.10(@types/react@18.2.61)(react-dom@18.2.0)(react@18.2.0)
   '@xtreamsrl/react-ui-kit':
-    specifier: ^0.10.1
-    version: 0.10.1(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(@mui/system@5.15.11)(@types/react@18.2.61)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^0.11.0
+    version: 0.11.0(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(@mui/system@5.15.11)(@types/react@18.2.61)(react-dom@18.2.0)(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -1399,8 +1399,8 @@ packages:
       - supports-color
     dev: true
 
-  /@xtreamsrl/react-ui-kit@0.10.1(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(@mui/system@5.15.11)(@types/react@18.2.61)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-JsiowQNkTHXUzWLKHwDyidP1kWrVesXfZBCjO8Vu4BvtA4hVwmmPxFJ0+6cs2lal32AaBcQUY9otNsIGEI7ZZA==}
+  /@xtreamsrl/react-ui-kit@0.11.0(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(@mui/system@5.15.11)(@types/react@18.2.61)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-p3pfSddxG79QoXh9rgGsw1VdqnkGZnLV1ZksbrRAmFGWlTpOsNw8Npr9wIN9/b4WLT0AziUkI+Br50XJkJED1g==}
     peerDependencies:
       react: ^16.0.0 || ^17.0.0 || ^18.0.0
     dependencies:

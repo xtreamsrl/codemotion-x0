@@ -16,9 +16,6 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
   },
   "include": ["src", "./node_modules/@xtreamsrl/react-ui-kit/src/theme/augmentation/*.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
