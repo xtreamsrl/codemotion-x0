@@ -16,8 +16,7 @@ const fastify = Fastify({
     const data = request.body;
     console.log(data);
     const inputs = {
-      userDescription: (request.body as any).description,
-      framework: 'react',
+      userDescription: (request.body as any).description
     };
     const result = await pipeline(inputs);
 
