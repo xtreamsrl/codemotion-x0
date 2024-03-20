@@ -2,6 +2,7 @@ import { DesignNewComponentOutput, PipelineInputs } from '../utils/types';
 import OpenAI from 'openai';
 import COMPONENT_METADATA from '../data/components.json';
 import { designSystemPrompt, designUserPromptTemplate } from '../prompts/design';
+import { designNewComponentOutputSchema } from '../utils/designNewComponentOutput';
 
 export async function designStep(inputs: PipelineInputs): Promise<DesignNewComponentOutput> {
   // Retrieve context
